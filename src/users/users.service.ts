@@ -30,18 +30,18 @@ export class UsersService {
   }
 
   async findAll(): Promise<IUsuario[]> {
-    return this.usuarioModel.find().exec();
+    return await this.usuarioModel.find().exec();
   }
 
   async findOne(id: string): Promise<IUsuario | null> {
-    return this.usuarioModel.findOne({ id }).exec();
+    return await this.usuarioModel.findOne({ _id: id }).exec();
   }
 
   async eliminar(id: string): Promise<IUsuario | null> {
-    return this.usuarioModel.findByIdAndDelete(id).exec();
+    return await this.usuarioModel.findByIdAndDelete(id).exec();
   }
 
   async update(id: string, data: UpdateUserDto): Promise<IUsuario | null> {
-    return this.usuarioModel.findByIdAndUpdate(id, data, { new: true }).exec();
+    return await this.usuarioModel.findByIdAndUpdate(id, data, { new: true }).exec();
   }
 }

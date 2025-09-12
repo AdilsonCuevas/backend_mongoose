@@ -25,19 +25,19 @@ export class ClientesService {
 
   }
 
-  findAll() {
-    return this.clienteModel.find().exec();
+  async findAll() {
+    return await this.clienteModel.find().exec();
   }
 
-  findOne(id: string) {
-    return this.clienteModel.findOne({ id }).exec();
+  async findOne(id: string) {
+    return await this.clienteModel.findOne({ _id: id }).exec();
   }
 
-  update(id: string, updateClienteDto: UpdateClienteDto) {
-    return this.clienteModel.findByIdAndUpdate(id, updateClienteDto, { new: true }).exec();
+  async update(id: string, updateClienteDto: UpdateClienteDto) {
+    return await this.clienteModel.findByIdAndUpdate(id, updateClienteDto, { new: true }).exec();
   }
 
-  remove(id: string) {
-    return this.clienteModel.findByIdAndDelete(id).exec();
+  async remove(id: string) {
+    return await this.clienteModel.findByIdAndDelete(id).exec();
   }
 }
