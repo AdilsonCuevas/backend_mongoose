@@ -20,7 +20,7 @@ export class UsersController {
 
     @UseGuards(JwtGuard)
     @Get(':id')
-    @ApiOperation({ summary: 'LIstar Usuarios por paginacion' })
+    @ApiOperation({ summary: 'LIstar Usuarios' })
     async oneOuser(@Param('id') id: string) {
         return await this.usersService.findOne(id);
     }

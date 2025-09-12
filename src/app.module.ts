@@ -20,6 +20,7 @@ import { ClientesModule } from './clientes/clientes.module';
       }),
     }),
     AuthModule,
+    ClientesModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

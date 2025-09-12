@@ -16,7 +16,7 @@ export class AuthService {
   constructor(
     private jwtService: JwtService,
     private configService: ConfigService,
-    @InjectModel('Usuario') private usuarioModel: Model<IUsuario>,
+    @InjectModel('Usuarios') private usuarioModel: Model<IUsuario>,
   ) { }
 
   async login(dto: LoginDto) {
@@ -48,8 +48,8 @@ export class AuthService {
   }
 
   async validateUser(dto: LoginDto) {
-    const user = await this.findByEmail(dto.username);
-    if (user && (await compare(dto.passwork, user.password))) {
+    const user = await this.findByEmail(dto.email);
+    if (user && (await compare(dto.password, user.password))) {
       const { password, ...result } = user;
       return result;
     }
