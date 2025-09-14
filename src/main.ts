@@ -10,24 +10,20 @@ async function bootstrapServer() {
   if (!cachedHandler) {
     const expressApp = express();
 
-    // 🔑 Responder preflight antes de Nest
-    expressApp.options('*', (req, res) => {
+    expressApp.use((req, res, next) => {
       res.header('Access-Control-Allow-Origin', 'https://frontend-angular-liard.vercel.app');
       res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS');
       res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-      return res.sendStatus(200);
+      // si no usas cookies, no pongas Access-Control-Allow-Credentials
+      if (req.method === 'OPTIONS') {
+        return res.sendStatus(200);
+      }
+      next();
     });
 
     const app = await NestFactory.create(AppModule, new ExpressAdapter(expressApp));
-
-    // CORS en Nest también
-    app.enableCors({
-      origin: 'https://frontend-angular-liard.vercel.app',
-      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-      allowedHeaders: 'Content-Type, Authorization',
-    });
-
     await app.init();
+
     cachedHandler = expressApp;
   }
   return cachedHandler;
