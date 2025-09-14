@@ -7,9 +7,13 @@ dotenv.config();
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
-    origin: process.env.CORS_ORIGIN ?? 'https://frontend-angular-mu-nine.vercel.app',
-    methods: 'GET,PUT,POST,DELETE,OPTIONS',
+    origin: [
+      'https://frontend-angular-liard.vercel.app',
+      process.env.CORS_ORIGIN,
+    ],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization'],
   });
   await app.listen(process.env.PORT ?? 4000);
 }
