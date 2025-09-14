@@ -9,13 +9,23 @@ let cachedHandler: any;
 async function bootstrapServer() {
   if (!cachedHandler) {
     const expressApp = express();
+
+    // 🔑 Responder preflight antes de Nest
+    expressApp.options('*', (req, res) => {
+      res.header('Access-Control-Allow-Origin', 'https://frontend-angular-liard.vercel.app');
+      res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS');
+      res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+      res.header('Access-Control-Allow-Credentials', 'true');
+      return res.sendStatus(200);
+    });
+
     const app = await NestFactory.create(AppModule, new ExpressAdapter(expressApp));
 
-    // 🔑 Configuración estricta de CORS
+    // CORS en Nest también
     app.enableCors({
-      origin: ['https://frontend-angular-liard.vercel.app'],
-      methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
-      allowedHeaders: ['Content-Type', 'Authorization'],
+      origin: 'https://frontend-angular-liard.vercel.app',
+      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+      allowedHeaders: 'Content-Type, Authorization',
       credentials: true,
     });
 
