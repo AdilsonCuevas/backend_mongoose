@@ -13,9 +13,7 @@ async function bootstrapServer() {
     const app = await NestFactory.create(AppModule, new ExpressAdapter(expressApp));
 
     app.enableCors({
-      origin: '*',
-      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-      allowedHeaders: 'Content-Type, Authorization',
+      origin: [process.env.CORS_ORIGIN ?? 'https:localhost:4200', 'https://frontend-angular-liard.vercel.app/'],
       credentials: false,
     });
 
