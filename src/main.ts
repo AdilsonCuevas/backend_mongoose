@@ -15,7 +15,6 @@ async function bootstrapServer() {
       res.header('Access-Control-Allow-Origin', 'https://frontend-angular-liard.vercel.app');
       res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS');
       res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-      res.header('Access-Control-Allow-Credentials', 'true');
       return res.sendStatus(200);
     });
 
@@ -26,7 +25,6 @@ async function bootstrapServer() {
       origin: 'https://frontend-angular-liard.vercel.app',
       methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
       allowedHeaders: 'Content-Type, Authorization',
-      credentials: true,
     });
 
     await app.init();
