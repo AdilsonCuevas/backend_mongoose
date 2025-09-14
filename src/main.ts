@@ -1,16 +1,33 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import * as dotenv from 'dotenv';
+import { ExpressAdapter } from '@nestjs/platform-express';
+import { Request, Response } from 'express';
 
-dotenv.config();
+import * as express from 'express';
 
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  app.enableCors({
-    origin: process.env.CORS_ORIGIN ?? 'http://localhost:4200',
-    credentials: true,
-  });
-  await app.listen(process.env.PORT ?? 4000);
+let cachedHandler: any;
+
+async function bootstrapServer() {
+  if (!cachedHandler) {
+    const expressApp = express();
+    const app = await NestFactory.create(AppModule, new ExpressAdapter(expressApp));
+
+    // Configuración de CORS
+    app.enableCors({
+      origin: process.env.CORS_ORIGIN ?? 'http://localhost:4200',
+      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+      credentials: true,
+    });
+
+    await app.init();
+    cachedHandler = expressApp;
+  }
+  return cachedHandler;
 }
 
-bootstrap();
+// Handler para Vercel
+export default async function handler(req: Request, res: Response) {
+  const server = await bootstrapServer();
+  server(req, res);
+}
+
